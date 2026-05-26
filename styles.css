@@ -102,7 +102,9 @@ body::before {
 .pfp {
   display: grid;
   justify-self: center;
+  align-self: center;
   width: clamp(112px, 18vw, 184px);
+  height: clamp(112px, 18vw, 184px);
   aspect-ratio: 1;
   border: 2px solid #747f8d;
   border-radius: 8px;
@@ -470,6 +472,7 @@ h2 {
 
   .pfp {
     width: clamp(96px, 34vw, 136px);
+    height: clamp(96px, 34vw, 136px);
   }
 
   h1 {
