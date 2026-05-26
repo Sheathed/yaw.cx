@@ -186,13 +186,14 @@ body::before {
   object-fit: cover;
 }
 
-.profile-copy,
-.section-heading {
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
-}
-
 .profile-copy {
   text-align: center;
+}
+
+.kicker,
+.bio,
+.section-heading {
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
 }
 
 .kicker {
@@ -204,17 +205,31 @@ body::before {
 }
 
 h1 {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
   margin: 0;
   color: #f8f2ff;
-  -webkit-text-stroke: 1px #d8c8ff;
-  paint-order: stroke fill;
-  text-shadow:
-    0 0 4px rgba(216, 200, 255, 0.92),
-    0 0 12px rgba(139, 61, 255, 0.82),
-    0 0 24px rgba(139, 61, 255, 0.48);
+  text-shadow: none;
   font-size: clamp(3.25rem, 10vw, 8.5rem);
   line-height: 0.9;
   overflow-wrap: anywhere;
+  transform: translateZ(0);
+}
+
+h1::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  content: attr(data-title);
+  color: transparent;
+  -webkit-text-stroke: 1px #d8c8ff;
+  text-shadow:
+    0 0 4px rgba(216, 200, 255, 0.9),
+    0 0 12px rgba(139, 61, 255, 0.76),
+    0 0 24px rgba(139, 61, 255, 0.42);
+  pointer-events: none;
+  transform: translateZ(0);
 }
 
 h2 {
