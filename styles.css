@@ -56,6 +56,38 @@ body::before {
     linear-gradient(rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.44));
 }
 
+.locale-control {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 10;
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  background: rgba(9, 8, 13, 0.72);
+  align-items: center;
+  backdrop-filter: blur(12px);
+}
+
+.locale-control label {
+  color: var(--text-soft);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.locale-control select {
+  max-width: 132px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 6px;
+  padding: 5px 26px 5px 8px;
+  background: rgba(0, 0, 0, 0.44);
+  color: #fff;
+  font: inherit;
+  font-size: 0.82rem;
+}
+
 .shell {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
@@ -339,7 +371,7 @@ h2 {
   position: absolute;
   inset: 0;
   display: grid;
-  content: "Copy";
+  content: attr(data-copy-label);
   color: #fff;
   place-items: center;
   background: rgba(0, 0, 0, 0.68);
@@ -356,7 +388,7 @@ h2 {
 }
 
 .copy-badge[data-copied="true"]::after {
-  content: "Copied";
+  content: attr(data-copied-label);
   opacity: 1;
 }
 
@@ -444,6 +476,12 @@ h2 {
     min-height: 100svh;
     gap: 14px;
     padding: 18px;
+    padding-top: 64px;
+  }
+
+  .locale-control {
+    top: 10px;
+    right: 10px;
   }
 
   .profile-panel,
@@ -502,6 +540,16 @@ h2 {
 }
 
 @media (max-width: 520px) {
+  .locale-control {
+    left: 10px;
+    right: 10px;
+    justify-content: space-between;
+  }
+
+  .locale-control select {
+    max-width: 54vw;
+  }
+
   .button-grid {
     grid-template-columns: 1fr;
   }

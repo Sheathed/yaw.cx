@@ -24,6 +24,18 @@
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
+    <div class="locale-control" aria-label="Language selector">
+      <label for="locale-select">Language</label>
+      <select id="locale-select">
+        <option value="en">English</option>
+        <option value="ru">Русский</option>
+        <option value="uz">O'zbekcha</option>
+        <option value="pt">Português</option>
+        <option value="de">Deutsch</option>
+        <option value="fr">Français</option>
+      </select>
+    </div>
+
     <main class="shell" aria-label="home">
       <section class="panel profile-panel" aria-labelledby="profile-title">
         <div class="pfp is-loading" id="discord-pfp-status">
@@ -33,7 +45,7 @@
           <!-- <p class="kicker">17 y/o hobbyist software engineer</p> -->
           <h1 id="profile-title">Sheathed</h1>
           <!-- <p class="tagline">flavour text</p> -->
-          <p class="bio">
+          <p class="bio" data-i18n="bio">
             17 y/o hobbyist software engineer
           </p>
         </div>
@@ -42,8 +54,8 @@
       <section class="panel discord-panel" aria-label="Discord activity">
         <div class="activity" id="discord-activity">
           <div>
-            <p class="activity-title" id="discord-activity-title">Loading Discord...</p>
-            <p class="activity-detail" id="discord-activity-detail">Fetching live presence</p>
+            <p class="activity-title" id="discord-activity-title" data-i18n="presenceLoadingTitle">Loading Discord...</p>
+            <p class="activity-detail" id="discord-activity-detail" data-i18n="presenceLoadingDetail">Fetching live presence</p>
           </div>
         </div>
       </section>
@@ -77,35 +89,35 @@
         <div class="project-list">
           <a class="project" href="https://github.com/Sheathed/Saturn" aria-label="Saturn">
             <span>Saturn</span>
-            <small>Custom Deezer client made in Flutter. Fully open-source and available on all platforms.</small>
+            <small data-i18n="projectSaturn">Custom Deezer client made in Flutter. Fully open-source and available on all platforms.</small>
           </a>
           <a class="project" href="https://github.com/Sheathed/Saturn-PC" aria-label="Saturn (Old)">
             <span>Saturn (Old)</span>
-            <small>Custom Deezer client made in Electron. Fully open-source and available on all platforms.</small>
+            <small data-i18n="projectSaturnOld">Custom Deezer client made in Electron. Fully open-source and available on all platforms.</small>
           </a>
           <a class="project" href="https://neurobox.app" aria-label="Neurobox">
             <span>Neurobox</span>
-            <small>Discord RPC utility. Open-sourcing soon...</small>
+            <small data-i18n="projectNeurobox">Discord RPC utility. Open-sourcing soon...</small>
           </a>
           <a class="project" href="https://github.com/Sheathed/Moonlight" aria-label="Moonlight">
             <span>Moonlight</span>
-            <small>Multi-purpose Discord bot. Open-sourcing soon...</small>
+            <small data-i18n="projectMoonlight">Multi-purpose Discord bot. Open-sourcing soon...</small>
           </a>
           <a class="project" href="https://nullburg.com" aria-label="Nullburg">
             <span>Nullburg</span>
-            <small>3D multiplayer sandbox game. Coming soon...</small>
+            <small data-i18n="projectNullburg">3D multiplayer sandbox game. Coming soon...</small>
           </a>
           <!-- <a class="project" href="#" aria-label="Snip"> -->
           <a class="project" aria-label="Snip">
             <span>Snip</span>
-            <small>A user-experience oriented IDE prioritizing frontend development. Coming soon...</small>
+            <small data-i18n="projectSnip">A user-experience oriented IDE prioritizing frontend development. Coming soon...</small>
           </a>
         </div>
       </section>
 
       <section class="panel badges-panel" aria-label="Website badges">
         <div class="badge-grid">
-          <a href="https://yaw.cx" class="copy-badge" id="copy-badge" aria-label="Copy yaw.cx badge embed">
+          <a href="https://yaw.cx" class="copy-badge" id="copy-badge" aria-label="Copy yaw.cx badge embed" data-copy-label="Copy">
             <img src="/badges/ycx.png" alt="yaw.cx" decoding="async" width="88" height="31">
           </a>
           <a href="https://saturn.kim">
@@ -147,13 +159,182 @@
       const activityTitle = document.querySelector("#discord-activity-title");
       const activityDetail = document.querySelector("#discord-activity-detail");
       const copyBadge = document.querySelector("#copy-badge");
+      const localeSelect = document.querySelector("#locale-select");
 
-      const statusLabels = {
-        online: "Online",
-        idle: "Idle",
-        dnd: "Do not disturb",
-        offline: "Offline"
+      // locales 
+      // todo: move this to an external file maybe?
+      const translations = {
+        en: {
+          languageLabel: "Language",
+          bio: "17 y/o hobbyist software engineer",
+          presenceLoadingTitle: "Loading Discord...",
+          presenceLoadingDetail: "Fetching live presence",
+          online: "Online",
+          idle: "Idle",
+          dnd: "Do not disturb",
+          offline: "Offline",
+          idling: "Idling",
+          activeNow: "Active now",
+          discordActivity: "Discord activity",
+          listeningTo: "Listening to {song}",
+          errorTitle: "Oops!",
+          errorDetail: "Something went wrong.",
+          copy: "Copy",
+          copied: "Copied",
+          projectSaturn: "Custom Deezer client made in Flutter. Fully open-source and available on all platforms.",
+          projectSaturnOld: "Custom Deezer client made in Electron. Fully open-source and available on all platforms.",
+          projectNeurobox: "Discord RPC utility. Open-sourcing soon...",
+          projectMoonlight: "Multi-purpose Discord bot. Open-sourcing soon...",
+          projectNullburg: "3D multiplayer sandbox game. Coming soon...",
+          projectSnip: "A user-experience oriented IDE prioritizing frontend development. Coming soon..."
+        },
+        ru: {
+          languageLabel: "Язык",
+          bio: "17-летний хобби-разработчик ПО",
+          presenceLoadingTitle: "Загрузка Discord...",
+          presenceLoadingDetail: "Получаю статус",
+          online: "В сети",
+          idle: "Неактивен",
+          dnd: "Не беспокоить",
+          offline: "Не в сети",
+          idling: "Бездействует",
+          activeNow: "Активен сейчас",
+          discordActivity: "Активность Discord",
+          listeningTo: "Слушает {song}",
+          errorTitle: "Упс!",
+          errorDetail: "Что-то пошло не так.",
+          copy: "Копировать",
+          copied: "Скопировано",
+          projectSaturn: "Кастомный клиент Deezer на Flutter. Полностью open-source и доступен на всех платформах.",
+          projectSaturnOld: "Кастомный клиент Deezer на Electron. Полностью open-source и доступен на всех платформах.",
+          projectNeurobox: "Утилита Discord RPC. Скоро будет open-source...",
+          projectMoonlight: "Многоцелевой Discord-бот. Скоро будет open-source...",
+          projectNullburg: "3D многопользовательская песочница. Скоро...",
+          projectSnip: "IDE с упором на удобство пользователя и фронтенд-разработку. Скоро..."
+        },
+        uz: {
+          languageLabel: "Til",
+          bio: "17 yoshli havaskor dastur muhandisi",
+          presenceLoadingTitle: "Discord yuklanmoqda...",
+          presenceLoadingDetail: "Jonli holat olinmoqda",
+          online: "Onlayn",
+          idle: "Faol emas",
+          dnd: "Bezovta qilmang",
+          offline: "Oflayn",
+          idling: "Kutmoqda",
+          activeNow: "Hozir faol",
+          discordActivity: "Discord faolligi",
+          listeningTo: "{song} tinglanmoqda",
+          errorTitle: "Voy!",
+          errorDetail: "Nimadir xato ketdi.",
+          copy: "Nusxa",
+          copied: "Nusxalandi",
+          projectSaturn: "Flutter'da yaratilgan maxsus Deezer mijozi. To'liq open-source va barcha platformalarda mavjud.",
+          projectSaturnOld: "Electron'da yaratilgan maxsus Deezer mijozi. To'liq open-source va barcha platformalarda mavjud.",
+          projectNeurobox: "Discord RPC utilitasi. Tez orada open-source bo'ladi...",
+          projectMoonlight: "Ko'p maqsadli Discord boti. Tez orada open-source bo'ladi...",
+          projectNullburg: "3D multiplayer sandbox o'yini. Tez orada...",
+          projectSnip: "Frontend ishlab chiqishga e'tibor qaratgan, qulaylikka yo'naltirilgan IDE. Tez orada..."
+        },
+        pt: {
+          languageLabel: "Idioma",
+          bio: "Engenheiro de software hobbyista de 17 anos",
+          presenceLoadingTitle: "Carregando Discord...",
+          presenceLoadingDetail: "Buscando presença ao vivo",
+          online: "Online",
+          idle: "Ausente",
+          dnd: "Não perturbe",
+          offline: "Offline",
+          idling: "Ocioso",
+          activeNow: "Ativo agora",
+          discordActivity: "Atividade no Discord",
+          listeningTo: "Ouvindo {song}",
+          errorTitle: "Ops!",
+          errorDetail: "Algo deu errado.",
+          copy: "Copiar",
+          copied: "Copiado",
+          projectSaturn: "Cliente Deezer customizado feito em Flutter. Totalmente open-source e disponível em todas as plataformas.",
+          projectSaturnOld: "Cliente Deezer customizado feito em Electron. Totalmente open-source e disponível em todas as plataformas.",
+          projectNeurobox: "Utilitário de Discord RPC. Será open-source em breve...",
+          projectMoonlight: "Bot Discord multiuso. Será open-source em breve...",
+          projectNullburg: "Jogo sandbox multiplayer 3D. Em breve...",
+          projectSnip: "IDE focada na experiência do usuário e em desenvolvimento frontend. Em breve..."
+        },
+        de: {
+          languageLabel: "Sprache",
+          bio: "17-jähriger Hobby-Softwareentwickler",
+          presenceLoadingTitle: "Discord wird geladen...",
+          presenceLoadingDetail: "Live-Präsenz wird abgerufen",
+          online: "Online",
+          idle: "Abwesend",
+          dnd: "Bitte nicht stören",
+          offline: "Offline",
+          idling: "Untätig",
+          activeNow: "Gerade aktiv",
+          discordActivity: "Discord-Aktivität",
+          listeningTo: "Hört {song}",
+          errorTitle: "Ups!",
+          errorDetail: "Etwas ist schiefgelaufen.",
+          copy: "Kopieren",
+          copied: "Kopiert",
+          projectSaturn: "Eigener Deezer-Client in Flutter. Vollständig open-source und auf allen Plattformen verfügbar.",
+          projectSaturnOld: "Eigener Deezer-Client in Electron. Vollständig open-source und auf allen Plattformen verfügbar.",
+          projectNeurobox: "Discord-RPC-Tool. Bald open-source...",
+          projectMoonlight: "Mehrzweck-Discord-Bot. Bald open-source...",
+          projectNullburg: "3D-Multiplayer-Sandbox-Spiel. Demnächst...",
+          projectSnip: "Eine IDE mit Fokus auf Nutzererfahrung und Frontend-Entwicklung. Demnächst..."
+        },
+        fr: {
+          languageLabel: "Langue",
+          bio: "Développeur logiciel amateur de 17 ans",
+          presenceLoadingTitle: "Chargement de Discord...",
+          presenceLoadingDetail: "Récupération de la présence en direct",
+          online: "En ligne",
+          idle: "Inactif",
+          dnd: "Ne pas déranger",
+          offline: "Hors ligne",
+          idling: "Inactif",
+          activeNow: "Actif maintenant",
+          discordActivity: "Activité Discord",
+          listeningTo: "Écoute {song}",
+          errorTitle: "Oups !",
+          errorDetail: "Quelque chose s'est mal passé.",
+          copy: "Copier",
+          copied: "Copié",
+          projectSaturn: "Client Deezer personnalisé fait avec Flutter. Entièrement open-source et disponible sur toutes les plateformes.",
+          projectSaturnOld: "Client Deezer personnalisé fait avec Electron. Entièrement open-source et disponible sur toutes les plateformes.",
+          projectNeurobox: "Utilitaire Discord RPC. Bientôt open-source...",
+          projectMoonlight: "Bot Discord polyvalent. Bientôt open-source...",
+          projectNullburg: "Jeu sandbox multijoueur en 3D. Bientôt disponible...",
+          projectSnip: "Un IDE orienté expérience utilisateur, avec priorité au développement frontend. Bientôt disponible..."
+        }
       };
+
+      let currentLocale = localStorage.getItem("locale") || "en";
+
+      function t(key, replacements = {}) {
+        const value = translations[currentLocale]?.[key] || translations.en[key] || key;
+        return Object.entries(replacements).reduce(
+          (text, [name, replacement]) => text.replace(`{${name}}`, replacement),
+          value
+        );
+      }
+
+      function applyLocale(locale) {
+        currentLocale = translations[locale] ? locale : "en";
+        localStorage.setItem("locale", currentLocale);
+        document.documentElement.lang = currentLocale;
+        localeSelect.value = currentLocale;
+
+        document.querySelector(".locale-control label").textContent = t("languageLabel");
+
+        document.querySelectorAll("[data-i18n]").forEach((element) => {
+          element.textContent = t(element.dataset.i18n);
+        });
+
+        copyBadge.dataset.copyLabel = t("copy");
+        copyBadge.dataset.copiedLabel = t("copied");
+      }
 
       function setPresence(status, title, detail) {
         pfpStatus.className = `pfp is-${status || "offline"}`;
@@ -171,7 +352,7 @@
       function getMainActivity(data) {
         if (data.listening_to_spotify && data.spotify) {
           return {
-            title: `Listening to ${data.spotify.song}`,
+            title: t("listeningTo", { song: data.spotify.song }),
             detail: data.spotify.artist
           };
         }
@@ -180,14 +361,14 @@
 
         if (!activity) {
           return {
-            title: statusLabels[data.discord_status] || "Offline",
-            detail: "Idling"
+            title: t(data.discord_status) || t("offline"),
+            detail: t("idling")
           };
         }
 
         return {
-          title: activity.name || "Discord activity",
-          detail: [activity.details, activity.state].filter(Boolean).join(" - ") || "Active now"
+          title: activity.name || t("discordActivity"),
+          detail: [activity.details, activity.state].filter(Boolean).join(" - ") || t("activeNow")
         };
       }
 
@@ -203,9 +384,15 @@
           const activity = getMainActivity(payload.data);
           setPresence(payload.data.discord_status, activity.title, activity.detail);
         } catch (error) {
-          setPresence("offline", "Oops!", "Something went wrong.");
+          setPresence("offline", t("errorTitle"), t("errorDetail"));
         }
       }
+
+      applyLocale(currentLocale);
+      localeSelect.addEventListener("change", () => {
+        applyLocale(localeSelect.value);
+        updateDiscordPresence();
+      });
 
       updateDiscordPresence();
       setInterval(updateDiscordPresence, 30000);
