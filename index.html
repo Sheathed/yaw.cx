@@ -6,16 +6,16 @@
     <title>yaw.cx</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
 
-    <meta name="description" content="17 y/o hobbyist software engineer">
+    <meta name="description" content="Hobbyist software engineer">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://yaw.cx/">
     <meta property="og:title" content="yaw.cx">
-    <meta property="og:description" content="17 y/o hobbyist software engineer">
+    <meta property="og:description" content="Hobbyist software engineer">
     <meta name="theme-color" content="#8b3dff">
 
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="yaw.cx">
-    <meta name="twitter:description" content="17 y/o hobbyist software engineer">
+    <meta name="twitter:description" content="Hobbyist software engineer">
 
     <link rel="preload" as="image" href="/avatar/1.jpg" fetchpriority="high">
     <link rel="preload" as="image" href="/badges/ycx.png">
@@ -42,11 +42,11 @@
           <img src="/avatar/1.jpg" alt="Sheathed" width="184" height="184" fetchpriority="high" decoding="async">
         </div>
         <div class="profile-copy">
-          <!-- <p class="kicker">17 y/o hobbyist software engineer</p> -->
+          <!-- <p class="kicker">Hobbyist software engineer</p> -->
           <h1 id="profile-title" data-title="Sheathed">Sheathed</h1>
           <!-- <p class="tagline">flavour text</p> -->
           <p class="bio" data-i18n="bio">
-            17 y/o hobbyist software engineer
+            Hobbyist software engineer
           </p>
         </div>
       </section>
@@ -144,6 +144,7 @@
     <!-- todo: move to external file -->
     <script>
       const LANYARD_USER_ID = "719186341878825000";
+      const BIRTHDAY = new Date(2008, 6, 17);
 
       const titles = [
         "y",
@@ -170,13 +171,28 @@
       const activityDetail = document.querySelector("#discord-activity-detail");
       const copyBadge = document.querySelector("#copy-badge");
       const localeSelect = document.querySelector("#locale-select");
+      const metaDescriptions = document.querySelectorAll(
+        'meta[name="description"], meta[property="og:description"], meta[name="twitter:description"]'
+      );
+
+      function getAge() {
+        const today = new Date();
+        let age = today.getFullYear() - BIRTHDAY.getFullYear();
+        const birthdayThisYear = new Date(today.getFullYear(), BIRTHDAY.getMonth(), BIRTHDAY.getDate());
+
+        if (today < birthdayThisYear) {
+          age -= 1;
+        }
+
+        return age;
+      }
 
       // locales 
       // todo: move this to an external file maybe?
       const translations = {
         en: {
           languageLabel: "Language",
-          bio: "17 y/o hobbyist software engineer",
+          bio: "{age} y/o hobbyist software engineer",
           presenceLoadingTitle: "Loading Discord...",
           presenceLoadingDetail: "Fetching live presence",
           online: "Online",
@@ -200,7 +216,7 @@
         },
         ru: {
           languageLabel: "Язык",
-          bio: "17-летний хобби-разработчик ПО",
+          bio: "{age}-летний хобби-разработчик ПО",
           presenceLoadingTitle: "Загрузка Discord...",
           presenceLoadingDetail: "Получаю статус",
           online: "В сети",
@@ -224,7 +240,7 @@
         },
         uz: {
           languageLabel: "Til",
-          bio: "17 yoshli havaskor dastur muhandisi",
+          bio: "{age} yoshli havaskor dastur muhandisi",
           presenceLoadingTitle: "Discord yuklanmoqda...",
           presenceLoadingDetail: "Jonli holat olinmoqda",
           online: "Onlayn",
@@ -248,7 +264,7 @@
         },
         pt: {
           languageLabel: "Idioma",
-          bio: "Engenheiro de software hobbyista de 17 anos",
+          bio: "Engenheiro de software hobbyista de {age} anos",
           presenceLoadingTitle: "Carregando Discord...",
           presenceLoadingDetail: "Buscando presença ao vivo",
           online: "Online",
@@ -272,7 +288,7 @@
         },
         de: {
           languageLabel: "Sprache",
-          bio: "17-jähriger Hobby-Softwareentwickler",
+          bio: "{age}-jähriger Hobby-Softwareentwickler",
           presenceLoadingTitle: "Discord wird geladen...",
           presenceLoadingDetail: "Live-Präsenz wird abgerufen",
           online: "Online",
@@ -296,7 +312,7 @@
         },
         fr: {
           languageLabel: "Langue",
-          bio: "Développeur logiciel amateur de 17 ans",
+          bio: "Développeur logiciel amateur de {age} ans",
           presenceLoadingTitle: "Chargement de Discord...",
           presenceLoadingDetail: "Récupération de la présence en direct",
           online: "En ligne",
@@ -324,7 +340,7 @@
 
       function t(key, replacements = {}) {
         const value = translations[currentLocale]?.[key] || translations.en[key] || key;
-        return Object.entries(replacements).reduce(
+        return Object.entries({ age: getAge(), ...replacements }).reduce(
           (text, [name, replacement]) => text.replace(`{${name}}`, replacement),
           value
         );
@@ -344,6 +360,10 @@
 
         copyBadge.dataset.copyLabel = t("copy");
         copyBadge.dataset.copiedLabel = t("copied");
+
+        metaDescriptions.forEach((meta) => {
+          meta.content = translations.en.bio.replace("{age}", getAge());
+        });
       }
 
       function setPresence(status, title, detail) {
